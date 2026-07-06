@@ -160,9 +160,10 @@ function run(command, args, options = {}) {
     const child = spawn(command, args, {
       cwd: options.cwd,
       env: options.env,
-      shell: false,
+      shell: process.platform === 'win32',
       stdio: options.stdio ?? 'inherit',
     })
+    
 
     child.once('error', rejectRun)
     child.once('exit', (code) => {
@@ -181,10 +182,10 @@ function runQuiet(command, args, options = {}) {
     const child = spawn(command, args, {
       cwd: options.cwd,
       env: options.env,
-      shell: false,
+      shell: process.platform === 'win32',
       stdio: ['ignore', 'pipe', 'pipe'],
     })
-
+    
     let stdout = ''
 
     child.stdout.on('data', (chunk) => {
@@ -359,9 +360,10 @@ function spawnLongRunning(command, args, options = {}) {
   const child = spawn(command, args, {
     cwd: options.cwd,
     env: options.env,
-    shell: false,
+    shell: process.platform === 'win32',
     stdio: ['ignore', 'pipe', 'pipe'],
   })
+  
   const stdout = createPrefixedWriter(options.label ?? 'process', process.stdout)
   const stderr = createPrefixedWriter(options.label ?? 'process', process.stderr)
 
